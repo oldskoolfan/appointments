@@ -1,8 +1,8 @@
 
 
-drop database if exists appointmentdb;
-create database if not exists appointmentdb;
-use appointmentdb;
+drop database if exists andrewfharriscom_appointmentdb;
+create database if not exists andrewfharriscom_appointmentdb;
+use andrewfharriscom_appointmentdb;
 
 create table operating_hours(
 	operating_hours_id int unsigned not null auto_increment primary key,
@@ -36,4 +36,3 @@ values
 #values (date(from_unixtime(1443686400)), time(from_unixtime(1443686400)), 1443686400);
 
 #select * from appointments;
-

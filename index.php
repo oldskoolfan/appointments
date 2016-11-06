@@ -14,10 +14,7 @@
 
 
 	// db connect
-	//$con = new mysqli('localhost','root','','appointmentdb');
-	$home = getenv('HOME');
-	include "$home/etc/db-connect.php";
-	$con->select_db('appointmentdb');
+	include "include/mysql-connect.php";
 
 	// get hours of operation from database
 	$result = $con->query('select day_of_week+0 as day_of_week,

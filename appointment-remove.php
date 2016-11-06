@@ -1,6 +1,5 @@
 <?php
-include "/etc/db-connect.php";
-$con->select_db('appointmentdb');
+include "include/mysql-connect.php";
 
 $ts = isset($_GET['appt']) ? $_GET['appt'] : null;
 $page = isset($_GET['page']) ? $_GET['page'] : 0;
