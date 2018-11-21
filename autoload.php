@@ -6,5 +6,5 @@
 spl_autoload_register(function ($class) {
 	$dirs = explode('\\', $class);
 	$path = implode('/', $dirs);
-	include 'include/' . strtolower($path) . '.php';
+	include "include/$path.php";
 });
