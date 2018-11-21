@@ -1,6 +1,6 @@
 <?php
-$config = parse_ini_file("{$_SERVER['DOCUMENT_ROOT']}/config.ini");
-$etcPath = $config['etc_directory'];
-include "$etcPath/db-connect.php";
+$config = parse_ini_file(__DIR__ . '/../config.ini');
+$etcPath = $config['mysql_connect_path'];
+include $etcPath;
 
 $con->select_db('andrewfharriscom_appointmentdb');

@@ -71,7 +71,6 @@ require 'include/setup.php';
 <div class="page-links">
 	<a href="./?page=<?=$prev?>">Prev</a>|<a href="./?page=<?=++$page?>">Next</a>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="assets/scripts.js"></script>
 </body>
 </html>
