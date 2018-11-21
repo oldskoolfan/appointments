@@ -1,2 +1,2 @@
-etc_directory = /Users/andrew/etc
+mysql_connect_path = C:/etc/db-connect.php
 error_reporting = E_ALL

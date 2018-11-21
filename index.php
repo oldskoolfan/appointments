@@ -1,40 +1,38 @@
 <?php
 use Classes\Workday,
 	Classes\Appointment;
-require 'include/setup.php';
+
+require 'include/setup.php'; // initializes $data as DataHelper
+
+$workDays = $data->getWorkdays();	
+$appts = $data->getAppointments();
 ?>
-<!doctype html>
-<html>
-<head>
-<title>Appointment Calendar Example</title>
-<link rel="stylesheet" href="assets/styles.css">
-</head>
-<body>
-<h1>Appointment Calendar: <?=$month->format('F Y')?></h1>
+
+<?php include 'include/header.html' ?>
+
+<h1>Appointment Calendar: <?=$data->month->format('F Y')?></h1>
 <h4>Click a timeslot to create an appointment, or click an existing appointment to delete it</h4>
-<div class="page-links">
-	<a href="./?page=<?=$prev?>">Prev</a>|<a href="./?page=<?=$page + 1?>">Next</a>
-</div>
+
+<?php include 'include/page-links.php' ?>
+
 <section>
-<?php if ($currentDayOfWeek > WorkDay::FIRST_WEEK_DAY): ?>
+<?php if ($data->currentDayOfWeek > WorkDay::FIRST_WEEK_DAY): ?>
 	<div class="row">
 	<!-- echo empty table cells for each day offset from sunday at beginning of month -->
-	<?php for ($i = WorkDay::FIRST_WEEK_DAY; $i < $currentDayOfWeek; $i++):?>
+	<?php for ($i = WorkDay::FIRST_WEEK_DAY; $i < $data->currentDayOfWeek; $i++):?>
 		<div class="cell"></div>
 	<?php endfor; ?>
 <?php endif; ?>
 <!-- main loop to go through all days in a month -->
 <?php
-	for ($i = 1; $i <= $days; $i++) {
-		// create new datetime object for the day
-		$day = new DateTime("$m/$i/$y");
-		// set time to 12am
-		$day->setTime(0,0);
+	
+
+	for ($i = 1, $day = $data->getDay($i); $i <= $data->days; $i++) {
 
 		$dayHasAtLeastOneAppt = Appointment::dayHasAtLeastOneAppt($appts, $day);
 		$cellClass = $dayHasAtLeastOneAppt ? 'cell has-appt' : 'cell';
 
-		if ($currentDayOfWeek == WorkDay::FIRST_WEEK_DAY) echo '<div class="row">';
+		if ($data->currentDayOfWeek == WorkDay::FIRST_WEEK_DAY) echo '<div class="row">';
 		echo "<div class=\"$cellClass\">";
 		echo "<div class=\"day-of-month\">{$day->format('j')}</div>";
 		echo '<div class="timeslot-wrapper">';
@@ -53,24 +51,21 @@ require 'include/setup.php';
 			$day->modify("+30 minute");
 		}
 		echo "</div></div>";
-		if ($currentDayOfWeek == WorkDay::LAST_WEEK_DAY) echo "</div>";
+		if ($data->currentDayOfWeek == WorkDay::LAST_WEEK_DAY) echo "</div>";
 
-		WorkDay::setDayOfWeek($currentDayOfWeek);
+		WorkDay::setDayOfWeek($data->currentDayOfWeek);
 	}
 ?>
 
-<?php if ($currentDayOfWeek > WorkDay::FIRST_WEEK_DAY &&
-	$currentDayOfWeek <= WorkDay::LAST_WEEK_DAY):?>
+<?php if ($data->currentDayOfWeek > WorkDay::FIRST_WEEK_DAY &&
+	$data->currentDayOfWeek <= WorkDay::LAST_WEEK_DAY):?>
 	<!-- echo empty table cells for each day offset from sunday at end of month -->
-	<?php for ($i = $currentDayOfWeek; $i <= WorkDay::LAST_WEEK_DAY; $i++):?>
+	<?php for ($i = $data->currentDayOfWeek; $i <= WorkDay::LAST_WEEK_DAY; $i++):?>
 		<div class="cell"></div>
 	<?php endfor; ?>
 	</div>
 <?php endif; ?>
 </section>
-<div class="page-links">
-	<a href="./?page=<?=$prev?>">Prev</a>|<a href="./?page=<?=++$page?>">Next</a>
-</div>
-<script src="assets/scripts.js"></script>
-</body>
-</html>
+
+<?php include 'include/page-links.php' ?>
+<?php include 'include/footer.php' ?>
