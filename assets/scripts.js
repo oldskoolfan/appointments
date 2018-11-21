@@ -1,36 +1,35 @@
-$(function() {
-	'use strict';
+(function () {
+    const callback = (data) => {
+        if (data.status === 'error') throw new Error(data['error_msg']);
 
-	function appointmentAction() {
-		let $link = $(this),
-			url = 'appointment.php',
-			data = {
-				'appt': $link.data('appt-ts'),
-				'action': $link.data('action')
-			},
-			callback = (data) => {
-				console.debug(data);
-				let $link = $('li[data-appt-ts=' + data.appt + ']'),
-					$cell = $link.closest('div.cell'),
-					appts;
-				$link.data('action', data.action === 'add' ? 'remove' : 'add');
-				$link.toggleClass('appt-add appt-remove');
+        const link = document.querySelector(`li[data-appt-ts="${data.appt}"]`);
+        const cell = link.closest('div.cell');
+        
+        link.dataset.action = data.action === 'add' ? 'remove' : 'add';
+        link.classList.toggle('appt-add');
+        link.classList.toggle('appt-remove');
 
-				// check cell for appointments and toggle highlight if necessary
-				appts = $cell.find('li.appt-remove').length;
-				if (appts > 0) {
-					$cell.addClass('has-appt');
-				} else {
-					$cell.removeClass('has-appt');
-				}
-			};
-		$.post(url, data)
-			.done(callback)
-			.fail(function(xhr, status, err) {
-				alert('Houston we have a problem... :(');
-				console.error(err);
-			});
-	}
+        cell.classList.toggle('has-appt', cell.querySelectorAll('li.appt-remove').length);
+    };
 
-	$('li.appt-link').on('click', appointmentAction);
-})
+    const apptAction = function() {
+        const url = 'appointment.php';
+        const data = new FormData();
+        data.append('appt', this.dataset.apptTs);
+        data.append('action', this.dataset.action);
+
+        fetch(url, {
+            method: 'POST',
+            body: data,
+        }).then(resp => resp.json())
+        .then(callback)
+        .catch(err => {
+            console.error(err);
+            alert('Houston we have a problem... :(');
+        });
+    };
+
+    document.querySelectorAll('li.appt-link').forEach(el => {
+        el.addEventListener('click', apptAction);
+    });
+})();
