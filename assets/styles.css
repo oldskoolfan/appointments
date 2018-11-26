@@ -81,3 +81,25 @@ footer {
 	text-align: center;
 	margin-top: 10px;
 }
+fieldset {
+	max-width: 980px;
+	margin: 0 auto;	
+}
+input {
+	display: block;
+	margin: 1rem 0;
+}
+
+input[type="text"], input[type="password"] {
+	font: inherit;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+button {
+	font: inherit;
+	border-style: solid;
+	cursor: pointer;
+	padding: 0.5rem 1rem;
+}
