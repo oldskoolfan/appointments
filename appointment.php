@@ -11,11 +11,15 @@ $persist = function ($ts, $action, $con) {
 		'appt' => $ts,
 	];
 	$query = '';
+	
 	switch ($action) {
 		case 'add':
 			$result = $con->query("select * from appointments where appointment_timestamp = $ts");
 			if ($result->num_rows > 0) {
-				return;
+				$response['status'] = 'error';
+				$response['error_msg'] = 'Appointment already exists';
+				
+				return $response;
 			}
 			$query = "insert into appointments (appointment_date, appointment_time, appointment_timestamp)
 				values (date(from_unixtime($ts)),time(from_unixtime($ts)),$ts)";
@@ -23,9 +27,12 @@ $persist = function ($ts, $action, $con) {
 		case 'remove':
 			$query = "delete from appointments where appointment_timestamp = $ts";
 			break;
+		default:
+			break;
 	}
 
 	$result = $con->query($query);
+	
 	if (!$result) {
 		$response['status'] = 'error';
 		$response['error_msg'] = $con->error;
@@ -47,5 +54,3 @@ if (isset($ts) && isset($action)) {
 
 header('Content-type: application/json');
 echo json_encode($response);
-
-?>

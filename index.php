@@ -23,39 +23,38 @@ $appts = $data->getAppointments();
 		<div class="cell"></div>
 	<?php endfor; ?>
 <?php endif; ?>
+
 <!-- main loop to go through all days in a month -->
-<?php
+<?php for ($i = 1, $day = $data->getDay($i); $i <= $data->days; $i++): ?>
+	<?php if ($data->currentDayOfWeek == WorkDay::FIRST_WEEK_DAY): ?>
+		<div class="row">
+	<?php endif; ?>
 	
+	<div class="<?=$dayHasAtLeastOneAppt ? 'cell has-appt' : 'cell'?>">
+		<div class="day-of-month"><?=$day->format('j')?></div>
+		<div class="timeslot-wrapper">
+			<?php for ($j = 0, $action = Appointment::getActionForAppt($appts, $day->getTimeStamp()); $j < WorkDay::HALF_HOURS; $j++): ?>
+				<?php foreach ($workDays as $workDay): ?>
+					<?php if ($workDay->day == $day->format('w') + 1): ?>
+						<?php if ($workDay->getOpenDateTime($day) <= $day && $workDay->getCloseDateTime($day) >= $day): ?>
+							<li data-action="<?=$action?>" data-appt-ts="<?=$day->getTimestamp()?>" 
+								class="appt-link appt-<?=$action?>"><?=$day->format('h:i a')?></li>
+						<?php endif; ?>
+						<?php break; ?>
+					<?php endif; ?>
+				<?php endforeach; ?>
+				<?php $day->modify("+30 minute"); ?>
+			<?php endfor; ?>
+		</div>
+	</div>
+	
+	<?php if ($data->currentDayOfWeek == WorkDay::LAST_WEEK_DAY): ?>
+		</div>
+	<?php endif; ?>
 
-	for ($i = 1, $day = $data->getDay($i); $i <= $data->days; $i++) {
-
-		$dayHasAtLeastOneAppt = Appointment::dayHasAtLeastOneAppt($appts, $day);
-		$cellClass = $dayHasAtLeastOneAppt ? 'cell has-appt' : 'cell';
-
-		if ($data->currentDayOfWeek == WorkDay::FIRST_WEEK_DAY) echo '<div class="row">';
-		echo "<div class=\"$cellClass\">";
-		echo "<div class=\"day-of-month\">{$day->format('j')}</div>";
-		echo '<div class="timeslot-wrapper">';
-		for ($j = 0; $j < WorkDay::HALF_HOURS; $j++) {
-			foreach ($workDays as $workDay) {
-				if ($workDay->day == $day->format('w') + 1) {
-					if ($workDay->getOpenDateTime($day) <= $day &&
-						$workDay->getCloseDateTime($day) >= $day) {
-						$apptExists = Appointment::doesApptExist($appts, $day->getTimestamp());
-						$action = $apptExists ?	"remove" : "add";
-						echo "<li data-action=\"$action\" data-appt-ts=\"{$day->getTimestamp()}\" class=\"appt-link appt-$action\">{$day->format('h:i a')}</li></a>";
-					}
-					break;
-				}
-			}
-			$day->modify("+30 minute");
-		}
-		echo "</div></div>";
-		if ($data->currentDayOfWeek == WorkDay::LAST_WEEK_DAY) echo "</div>";
-
-		WorkDay::setDayOfWeek($data->currentDayOfWeek);
-	}
-?>
+	<?php WorkDay::setDayOfWeek($data->currentDayOfWeek); ?>
+<?php endfor; ?>
+<!-- end main loop -->
 
 <?php if ($data->currentDayOfWeek > WorkDay::FIRST_WEEK_DAY &&
 	$data->currentDayOfWeek <= WorkDay::LAST_WEEK_DAY):?>
