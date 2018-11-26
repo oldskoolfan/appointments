@@ -3,16 +3,16 @@
 <h1>CSCI 2412 Appointment Calendar Example</h1>
 
 <nav>
-	<a href="register.php">Create user account</a>
-	<a href="calendar.php">View calendar</a>
+	<a href="index.php">Login</a>
 </nav>
 
-<form action="login.php" method="post">
+<form action="register-submit.php" method="post">
 	<fieldset>
-		<legend>Login</legend>
+		<legend>Create account</legend>
 		<input type="text" name="username" maxlength="255" placeholder="Username"/>
 		<input type="password" name="password" placeholder="Password"/>
-		<button type="submit">Login</button>
+		<input type="password" name="confirm" placeholder="Confirm password"/>
+		<button type="submit">Submit</button>
 	</fieldset>
 </form>
 
