@@ -1,11 +1,6 @@
-<?php include 'include/header.html' ?>
+<?php include 'include/header.php' ?>
 
 <h1>CSCI 2412 Appointment Calendar Example</h1>
-
-<nav>
-	<a href="register.php">Create user account</a>
-	<a href="calendar.php">View calendar</a>
-</nav>
 
 <form action="login.php" method="post">
 	<fieldset>
