@@ -8,7 +8,18 @@ $workDays = $data->getWorkdays();
 $appts = $data->getAppointments();
 ?>
 
-<?php include 'include/header.html' ?>
+<?php include 'include/header.php' ?>
+
+<?php
+// redirect unauthorized users
+// TODO: move session_start out of header.php to another file
+// so we aren't possibly sending headers after html in response body
+if (!isset($_SESSION['user'])) {
+	header('Location: index.php');
+	exit();
+}
+
+?>
 
 <h1>Appointment Calendar: <?=$data->month->format('F Y')?></h1>
 <h4>Click a timeslot to create an appointment, or click an existing appointment to delete it</h4>
