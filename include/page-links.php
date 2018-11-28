@@ -1,3 +1,3 @@
 <div class="page-links">
-	<a href="./?page=<?=$data->prev?>">Prev</a>|<a href="./?page=<?=$data->page + 1?>">Next</a>
+	<a href="calendar.php?page=<?=$data->prev?>">Prev</a>|<a href="calendar.php?page=<?=$data->page + 1?>">Next</a>
 </div>

@@ -1,3 +1,4 @@
+<?php require_once 'include/setup.php' ?>
 <?php include 'include/header.php' ?>
 
 <h1>CSCI 2412 Appointment Calendar Example</h1>

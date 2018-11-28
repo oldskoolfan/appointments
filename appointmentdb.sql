@@ -4,6 +4,15 @@ drop database if exists andrewfharriscom_appointmentdb;
 create database if not exists andrewfharriscom_appointmentdb;
 use andrewfharriscom_appointmentdb;
 
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` nvarchar(255) NOT NULL,
+  `password` char(60) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE (`username`)
+);
+
+
 create table operating_hours(
 	operating_hours_id int unsigned not null auto_increment primary key,
     day_of_week enum('Sun','Mon','Tue','Wed','Thu','Fri','Sat') not null,
@@ -15,11 +24,14 @@ create table operating_hours(
 
 create table appointments(
 	appointment_id int unsigned not null auto_increment primary key,
+    user_id int unsigned not null,
     appointment_date date,
     appointment_time time,
     appointment_timestamp long,
     date_created datetime default current_timestamp,
-    last_updated timestamp
+    last_updated timestamp,
+    constraint appointments_users_fk foreign key (user_id) 
+        references users(id) on delete cascade 
 );
 
 insert into operating_hours(day_of_week, open_time, close_time)

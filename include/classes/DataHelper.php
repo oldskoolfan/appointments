@@ -109,6 +109,7 @@ class DataHelper
 				array_push(
 					$appts,
 					new Appointment(
+						$appt->user_id,
 						$appt->appointment_date,
 						$appt->appointment_time,
 						$appt->appointment_timestamp

@@ -47,6 +47,7 @@ class LoginHelper
 
 			// user is logged in
 			$_SESSION['user'] = $user->username;
+			$_SESSION['userId'] = $user->id;
 
 			header('Location: calendar.php');
 

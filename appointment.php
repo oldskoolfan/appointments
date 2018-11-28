@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // db connect
 include "include/mysql-connect.php";
 
@@ -11,6 +13,7 @@ $persist = function ($ts, $action, $con) {
 		'appt' => $ts,
 	];
 	$query = '';
+	$userId = $_SESSION['userId'];
 	
 	switch ($action) {
 		case 'add':
@@ -21,8 +24,8 @@ $persist = function ($ts, $action, $con) {
 				
 				return $response;
 			}
-			$query = "insert into appointments (appointment_date, appointment_time, appointment_timestamp)
-				values (date(from_unixtime($ts)),time(from_unixtime($ts)),$ts)";
+			$query = "insert into appointments (user_id, appointment_date, appointment_time, appointment_timestamp)
+				values ($userId, date(from_unixtime($ts)),time(from_unixtime($ts)),$ts)";
 			break;
 		case 'remove':
 			$query = "delete from appointments where appointment_timestamp = $ts";
