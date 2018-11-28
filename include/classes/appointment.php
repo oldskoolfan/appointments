@@ -4,6 +4,11 @@ namespace Classes;
 class Appointment 
 {
 	/**
+	 * @var int
+	 */
+	public $userId;
+
+	/**
 	 * @var string
 	 */
 	public $date;
@@ -18,8 +23,9 @@ class Appointment
 	 */
 	public $timestamp;
 
-	function __construct(string $date, string $time, int $ts) 
+	function __construct(int $userId, string $date, string $time, int $ts) 
 	{
+		$this->userId = $userId;
 		$this->date = $date;
 		$this->time = $time;
 		$this->timestamp = $ts;
@@ -27,16 +33,25 @@ class Appointment
 
 	public static function getActionForAppt(array $appts, int $ts) : string
 	{
-		return self::doesApptExist($appts, $ts) ? 'remove' : 'add';
-	}
+		$appointment = null;
+		$userId = $_SESSION['userId'];
 
-	public static function doesApptExist(array $appts, int $ts) : bool 
-	{
 		foreach($appts as $appt) {
-			if ($appt->timestamp == $ts) return true;
+			if ($appt->timestamp === $ts) {
+				$appointment = $appt;
+				break;
+			}
 		}
 
-		return false;
+		if (!$appointment) {
+			return 'add';
+		}
+
+		if ($appointment->userId !== $userId) {
+			return 'none';
+		}
+
+		return 'remove';
 	}
 
 	public static function dayHasAtLeastOneAppt(array $appts, \DateTime $day) : bool

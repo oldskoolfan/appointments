@@ -7,6 +7,8 @@ use Classes\Workday,
 // autoload
 require __dir__ . '/autoload.php';
 
+session_start();
+
 // db connect
 require 'mysql-connect.php';
 

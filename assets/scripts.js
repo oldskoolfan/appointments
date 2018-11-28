@@ -9,7 +9,7 @@
         link.classList.toggle('appt-add');
         link.classList.toggle('appt-remove');
 
-        cell.classList.toggle('has-appt', cell.querySelectorAll('li.appt-remove').length);
+        cell.classList.toggle('has-appt', cell.querySelectorAll('li.appt-remove, li.appt-none').length);
     };
 
     const apptAction = function() {
@@ -29,7 +29,7 @@
         });
     };
 
-    document.querySelectorAll('li.appt-link').forEach(el => {
+    document.querySelectorAll('li.appt-link:not(.appt-none').forEach(el => {
         el.addEventListener('click', apptAction);
     });
 })();

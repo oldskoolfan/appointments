@@ -7,7 +7,7 @@ html, body {
 body {
 	padding-bottom: 60px;
 }
-h1, h4 {
+h1, h2, h3, h4 {
 	text-align: center;
 }
 section {
@@ -52,12 +52,17 @@ div.cell div.timeslot-wrapper li {
 	padding-left: 5px;
 	list-style: none;
 	cursor: pointer;
+	user-select: none;
 }
-div.cell div.timeslot-wrapper li:hover {
+div.cell div.timeslot-wrapper li.appt-add:hover {
 	background-color: #f8f8f8;
 }
 div.cell div.timeslot-wrapper li.appt-remove {
 	background-color: #90C3D4;
+}
+div.cell div.timeslot-wrapper li.appt-none {
+	color: #ccc;
+	cursor: default;
 }
 div.cell:not(:last-of-type) {
 	border-right: 1px solid #ccc;
@@ -82,7 +87,7 @@ footer {
 	margin-top: 10px;
 }
 fieldset {
-	max-width: 980px;
+	max-width: 500px;
 	margin: 0 auto;	
 }
 input {

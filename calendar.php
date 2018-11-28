@@ -2,7 +2,13 @@
 use Classes\Workday,
 	Classes\Appointment;
 
-require 'include/setup.php'; // initializes $data as DataHelper
+require_once 'include/setup.php';
+
+// redirect unauthorized users
+if (!isset($_SESSION['user'])) {
+	header('Location: index.php');
+	exit();
+}
 
 $workDays = $data->getWorkdays();	
 $appts = $data->getAppointments();
@@ -10,18 +16,8 @@ $appts = $data->getAppointments();
 
 <?php include 'include/header.php' ?>
 
-<?php
-// redirect unauthorized users
-// TODO: move session_start out of header.php to another file
-// so we aren't possibly sending headers after html in response body
-if (!isset($_SESSION['user'])) {
-	header('Location: index.php');
-	exit();
-}
-
-?>
-
 <h1>Appointment Calendar: <?=$data->month->format('F Y')?></h1>
+<h3>Greetings, <?=$_SESSION['user']?>!</h3>
 <h4>Click a timeslot to create an appointment, or click an existing appointment to delete it</h4>
 
 <?php include 'include/page-links.php' ?>
@@ -41,13 +37,14 @@ if (!isset($_SESSION['user'])) {
 		<div class="row">
 	<?php endif; ?>
 	
-	<div class="<?=$dayHasAtLeastOneAppt ? 'cell has-appt' : 'cell'?>">
+	<div class="<?=Appointment::dayHasAtLeastOneAppt($appts, $day) ? 'cell has-appt' : 'cell'?>">
 		<div class="day-of-month"><?=$day->format('j')?></div>
 		<div class="timeslot-wrapper">
-			<?php for ($j = 0, $action = Appointment::getActionForAppt($appts, $day->getTimeStamp()); $j < WorkDay::HALF_HOURS; $j++): ?>
+			<?php for ($j = 0; $j < WorkDay::HALF_HOURS; $j++): ?>
 				<?php foreach ($workDays as $workDay): ?>
 					<?php if ($workDay->day == $day->format('w') + 1): ?>
 						<?php if ($workDay->getOpenDateTime($day) <= $day && $workDay->getCloseDateTime($day) >= $day): ?>
+							<?php $action = Appointment::getActionForAppt($appts, $day->getTimeStamp()) ?>
 							<li data-action="<?=$action?>" data-appt-ts="<?=$day->getTimestamp()?>" 
 								class="appt-link appt-<?=$action?>"><?=$day->format('h:i a')?></li>
 						<?php endif; ?>
